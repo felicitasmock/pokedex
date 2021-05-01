@@ -1,20 +1,49 @@
 let currentPokemon;
+let pokemons = [];
+
+/**
+ * function to get pokemons of JSON out of local storage
+ */
+/*
+function getPokemons() {
+    pokemons = getArray('pokemons');
+}
 
 // function to load pokemon API
 async function loadPokemon() {
-    let url = 'https://pokeapi.co/api/v2/pokemon/pikachu';
+    getPokemons();
+    for (let i = 0; i < pokemons.length; i++) {
+        const pokemonURL = pokemons[i]['url'];
+        let url = pokemonURL;
+        let response = await fetch(url);
+        currentPokemon = await response.json();
+    }
+    console.log('loaded pokemon:', currentPokemon);
+    console.log('pokemon name:', currentPokemon['name']);
+    renderPokemonInfo();
+
+}
+*/
+
+
+async function loadPokemon(){
+    //parse URL to get pokemon name
+    let urlName = document.location.href;
+
+    let pokemon = urlName.split('=')[1];
+    let url = `https://pokeapi.co/api/v2/pokemon/${pokemon}`;
     let response = await fetch(url);
     currentPokemon = await response.json();
 
     console.log('loaded pokemon:', currentPokemon);
-
     renderPokemonInfo();
 }
 
+
 // function to get all pokemon infos
 function renderPokemonInfo() {
+
     document.getElementById('pokemonName').innerHTML = currentPokemon['name'];
-    // document.getElementById('pokemonImg').src = currentPokemon['sprites']['front_shiny'];
     document.getElementById('pokemonImg').src = currentPokemon['sprites']['other']['dream_world']['front_default'];
     document.getElementById('height').innerHTML = currentPokemon['height'];
     document.getElementById('weight').innerHTML = currentPokemon['weight'];
@@ -24,6 +53,8 @@ function renderPokemonInfo() {
     getMoves();
 
 }
+
+
 
 /**
  * function to get the base stats
@@ -98,6 +129,14 @@ function navBar(selection) {
     // shows active nav tab and tab content
     document.getElementById('inner-' + selectedNavNumber).classList.remove('hide');
     document.getElementById(selectedNavNumber).classList.add('active');
+}
 
+// sets arry in local storage
+function setArray(key, array) {
+    localStorage.setItem(key, JSON.stringify(array));
+}
 
+function getArray(key) {
+    return JSON.parse(localStorage.getItem(key)) || [];
+    // gibt mir das was im local storage steht, ODER (||) gibt mir nichts ([])
 }
