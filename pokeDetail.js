@@ -98,9 +98,9 @@ function baseBar() {
  */
 function getMoves() {
     let moves = currentPokemon['moves'];
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 30; i++) {
         const move = moves[i];
-        if (i < 19) {
+        if (i < 29) {
             document.getElementById('moves').innerHTML += `<div class="moves">${move['move']['name']},</div>`;
         } else {
             document.getElementById('moves').innerHTML += `<div class="moves">${move['move']['name']}.</div>`;
