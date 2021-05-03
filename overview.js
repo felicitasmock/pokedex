@@ -110,10 +110,10 @@ async function getPokeColor(i) {
     }
 
     document.getElementById(`pokeBox${i}`).style.backgroundColor = color;
-   
+
     //pushes color into Pokemon JSON
     pokemons[i].color = color;
-   //saves pokemon Array in local storage
+    //saves pokemon Array in local storage
     setArray('backgroundColor', pokemons);
 }
 
@@ -126,3 +126,4 @@ function getArray(key) {
     return JSON.parse(localStorage.getItem(key)) || [];
     // gibt mir das was im local storage steht, ODER (||) gibt mir nichts ([])
 }
+

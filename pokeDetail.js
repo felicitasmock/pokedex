@@ -1,32 +1,11 @@
 let currentPokemon;
-let pokemons = [];
+let backgroundColor = [];
 
 /**
- * function to get pokemons of JSON out of local storage
+ * function to get pokemons from API
  */
-/*
-function getPokemons() {
-    pokemons = getArray('pokemons');
-}
 
-// function to load pokemon API
 async function loadPokemon() {
-    getPokemons();
-    for (let i = 0; i < pokemons.length; i++) {
-        const pokemonURL = pokemons[i]['url'];
-        let url = pokemonURL;
-        let response = await fetch(url);
-        currentPokemon = await response.json();
-    }
-    console.log('loaded pokemon:', currentPokemon);
-    console.log('pokemon name:', currentPokemon['name']);
-    renderPokemonInfo();
-
-}
-*/
-
-
-async function loadPokemon(){
     //parse URL to get pokemon name
     let urlName = document.location.href;
 
@@ -37,12 +16,15 @@ async function loadPokemon(){
 
     console.log('loaded pokemon:', currentPokemon);
     renderPokemonInfo();
+
+    // gets Array from local storage (to get background color)
+    backgroundColor = getArray('backgroundColor');
+    getbackgroundColor();
 }
 
 
 // function to get all pokemon infos
 function renderPokemonInfo() {
-
     document.getElementById('pokemonName').innerHTML = currentPokemon['name'];
     document.getElementById('pokemonImg').src = currentPokemon['sprites']['other']['dream_world']['front_default'];
     document.getElementById('height').innerHTML = currentPokemon['height'];
@@ -53,7 +35,6 @@ function renderPokemonInfo() {
     getMoves();
 
 }
-
 
 
 /**
@@ -93,8 +74,9 @@ function baseBar() {
         document.getElementById(`line${i}`).style.height = '10px';
     }
 }
+
 /**
- * functino to get moves
+ * function to get moves
  */
 function getMoves() {
     let moves = currentPokemon['moves'];
@@ -129,6 +111,24 @@ function navBar(selection) {
     // shows active nav tab and tab content
     document.getElementById('inner-' + selectedNavNumber).classList.remove('hide');
     document.getElementById(selectedNavNumber).classList.add('active');
+}
+
+/**
+ * function to define background color for the pokemon
+ */
+function getbackgroundColor() {
+    for (let i = 0; i < backgroundColor.length; i++) {
+
+        let pokeName = document.getElementById('pokemonName').innerHTML;
+        let n = backgroundColor[i]['name'].includes(`${pokeName}`);
+        let color = backgroundColor[i]['color'];
+
+        if (n == true) {
+            document.getElementById('pokedex').style.backgroundColor = color;
+
+        }
+    }
+
 }
 
 // sets arry in local storage
