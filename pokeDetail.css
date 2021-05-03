@@ -13,6 +13,23 @@ body {
     border-bottom: 2px solid black !important;
 }
 
+#pokemonName {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.back {
+    position: absolute;
+    cursor: pointer;
+    color: white;
+    text-decoration: none;
+}
+
+.back:hover {
+    text-decoration: underline;
+}
+
 #pokedex {
     min-height: 50vh;
     background: #FFCF4A;
@@ -92,7 +109,8 @@ body {
 .base-stats td {
     width: 200px;
 }
-.base-number{
+
+.base-number {
     width: 100px !important;
 }
 
@@ -107,11 +125,12 @@ body {
     margin-left: -204px;
     margin-top: 6px;
 }
-.moves{
+
+.moves {
     padding: 5px;
 }
 
-.moves-container{
+.moves-container {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;

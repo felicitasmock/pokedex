@@ -80,13 +80,14 @@ function baseBar() {
  */
 function getMoves() {
     let moves = currentPokemon['moves'];
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < moves.length; i++) {
         const move = moves[i];
-        if (i < 29) {
+        if (i < moves.length - 1) {
             document.getElementById('moves').innerHTML += `<div class="moves">${move['move']['name']},</div>`;
         } else {
             document.getElementById('moves').innerHTML += `<div class="moves">${move['move']['name']}.</div>`;
         }
+     
     }
 }
 
@@ -125,7 +126,12 @@ function getbackgroundColor() {
 
         if (n == true) {
             document.getElementById('pokedex').style.backgroundColor = color;
-
+        }
+        
+        if (n == true && color == 'white') {
+            document.getElementById('pokedex').style.color = 'gray';
+            document.getElementById('back').style.color = 'gray';
+            
         }
     }
 

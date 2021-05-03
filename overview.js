@@ -33,10 +33,9 @@ function showPokemons() {
         const pokemon = pokemons[i];
         document.getElementById('contentContainer').innerHTML += `
         <div onclick="openPokemon(${i})" id="pokeBox${i}" class="poke-box">
-            <h2 id="pokeName${i}"whats>${pokemon['name']}</h2>
-            <div class="img-bg"></div>
-            <img class="poke-img" id="pokeIMG${i}"></img>
-            
+                <h2 id="pokeName${i}"whats>${pokemon['name']}</h2>
+                <div class="img-bg"></div>
+                <img class="poke-img" id="pokeIMG${i}"></img>
         </div>
         `;
         getIMGcolor(i);
@@ -108,8 +107,13 @@ async function getPokeColor(i) {
     if (color == 'purple') {
         color = '#7C528D';
     }
+    if (color == 'white') {
+        color = 'white';
+        document.getElementById(`pokeBox${i}`).style.color = 'gray';
+    }
 
     document.getElementById(`pokeBox${i}`).style.backgroundColor = color;
+
 
     //pushes color into Pokemon JSON
     pokemons[i].color = color;
