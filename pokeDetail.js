@@ -236,7 +236,7 @@ async function getSpeciesOneImg(){
     document.getElementById('evoImg1').src = speciesOneImg;
 }
 
-// sets arry in local storage
+// sets array in local storage
 function setArray(key, array) {
     localStorage.setItem(key, JSON.stringify(array));
 }
