@@ -5,7 +5,7 @@ let backgroundColor = [];
 
 async function init() {
     loadPokemon();
-let currentPokemon = await loadPokemon();
+    let currentPokemon = await loadPokemon();
     renderPokemonInfo(currentPokemon);
     // gets Array from local storage (to get background color)
     backgroundColor = getArray('backgroundColor');
@@ -202,10 +202,15 @@ async function requestEvolutionChain(currentPokemon) {
     evolution = await eResponse.json();
     console.log('Evolution', evolution);
 
-    //evolution.push(evolution);
     getTrigger(currentPokemon);
+    getSpeciesOneImg(currentPokemon);
 }
 
+/**
+ * function to get the trigger of evolution and the details
+ * 
+ * @param {string} currentPokemon - This is the varibale for the current Pokemon
+ */
 function getTrigger(currentPokemon) {
     let trigger = evolution['chain']['evolves_to'][0]["evolution_details"][0]['trigger']['name'];
     let level = evolution['chain']['evolves_to'][0]["evolution_details"][0]['min_level'];
@@ -213,13 +218,23 @@ function getTrigger(currentPokemon) {
     document.getElementById('trigger').innerHTML = trigger + level;
     document.getElementById('evoImg').src = currentPokemon['sprites']['other']['dream_world']['front_default'];
 
+}
+
+/**
+ * function to get the next pokemon in evolution chain with name and img
+ */
+async function getSpeciesOneImg(){
     let species1 = evolution['chain']['evolves_to'][0]['species']['name'];
     document.getElementById('species1').innerHTML = species1;
 
+    let url = `https://pokeapi.co/api/v2/pokemon/${species1}`;
+    let response = await fetch(url);
+    let newPokemon = await response.json();
+    console.log('new pokemon', newPokemon);
 
-
+    let speciesOneImg = newPokemon['sprites']['other']['dream_world']['front_default'];
+    document.getElementById('evoImg1').src = speciesOneImg;
 }
-
 
 // sets arry in local storage
 function setArray(key, array) {
