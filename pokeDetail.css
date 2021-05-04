@@ -24,8 +24,14 @@ body {
     cursor: pointer;
     color: white;
     text-decoration: none;
+    display: flex;
+    align-items: center;
 }
-
+.back img {
+    filter: invert(1);
+    width: 30px;
+    padding-right: 10px;
+}
 .back:hover {
     text-decoration: underline;
 }
@@ -134,4 +140,23 @@ body {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+}
+
+.evolution-img{
+    width: 100px;
+}
+
+.evo-img-bg{
+    border-radius: 100%;
+    background-color: #eceff1;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+}
+
+.evo-wrapper{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
 }

@@ -119,6 +119,8 @@ async function getPokeColor(i) {
     pokemons[i].color = color;
     //saves pokemon Array in local storage
     setArray('backgroundColor', pokemons);
+
+    
 }
 
 // sets arry in local storage

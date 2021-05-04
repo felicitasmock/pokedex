@@ -10,7 +10,7 @@
         href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap"
         rel="stylesheet">
     <title>Pokedex</title>
-
+    <link href="/img/favicon.ico" rel="icon" type="image/x-icon" />
     <link rel="stylesheet" href="pokeDetail.css">
     <script src="pokeDetail.js"></script>
 
@@ -18,17 +18,21 @@
 
 </head>
 
-<body onload="loadPokemon()">
+<body onload="init()">
 
 
     <div id="pokedex">
-        <a href='overview.html' id="back" class="back">Back to All Pokemons</a>
+        <div class="back-wrapper">
+            <a href='overview.html' id="back" class="back">
+                <img src="img/arrow-97-64.png">
+                Back to All Pokemons</a>
+        </div>
         <h1 id="pokemonName"></h1>
         <div id="here"></div>
     </div>
     <div class="info-container">
         <div>
-            <img class="poke-img" id="pokemonImg"></img>
+            <img class="poke-img" id="pokemonImg">
         </div>
         <div class="nav">
             <a onclick="navBar('nav_1')" class="nav-item active" id="1" href="#">About</a>
@@ -40,6 +44,9 @@
             <div id="inner-1">
                 <div class="info"><b>Height: </b><span id="height"></span> cm</div>
                 <div class="info"><b>Weight: </b><span id="weight"></span> lbs</div>
+                <div class="info"><b>Egg Groups: </b><span id="eggGroups"></span></div>
+                <div class="info"><b>Growth Rate: </b><span id="growthRate"></span></div>
+                <div class="info"><b>Habitats: </b><span id="habitat"></span></div>
             </div>
 
             <div id="inner-2" class="hide">
@@ -50,7 +57,14 @@
             </div>
 
             <div id="inner-3" class="hide">
-                <div>blubb blubb blubb 3</div>
+                <div class="info"><b>Evolution Chain</b></div>
+                <div class="evo-wrapper">
+                    <div class="evo-img-bg">
+                        <img class="evolution-img" id="evoImg">
+                    </div>
+                    <div id="trigger"></div>
+                    <div id="species1"></div>
+                </div>
             </div>
 
             <div id="inner-4" class="hide">

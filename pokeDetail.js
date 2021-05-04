@@ -1,46 +1,51 @@
 let currentPokemon;
 let backgroundColor = [];
+//let pokeSpecies;
+//let evolution;
+
+async function init() {
+    loadPokemon();
+let currentPokemon = await loadPokemon();
+    renderPokemonInfo(currentPokemon);
+    // gets Array from local storage (to get background color)
+    backgroundColor = getArray('backgroundColor');
+    getbackgroundColor();
+    requestSpeciesURL(currentPokemon);
+}
 
 /**
  * function to get pokemons from API
  */
-
 async function loadPokemon() {
     //parse URL to get pokemon name
     let urlName = document.location.href;
-
     let pokemon = urlName.split('=')[1];
     let url = `https://pokeapi.co/api/v2/pokemon/${pokemon}`;
     let response = await fetch(url);
-    currentPokemon = await response.json();
-
+    let currentPokemon = await response.json();
     console.log('loaded pokemon:', currentPokemon);
-    renderPokemonInfo();
-
-    // gets Array from local storage (to get background color)
-    backgroundColor = getArray('backgroundColor');
-    getbackgroundColor();
+    return currentPokemon;
 }
 
 
+
 // function to get all pokemon infos
-function renderPokemonInfo() {
+function renderPokemonInfo(currentPokemon) {
     document.getElementById('pokemonName').innerHTML = currentPokemon['name'];
     document.getElementById('pokemonImg').src = currentPokemon['sprites']['other']['dream_world']['front_default'];
     document.getElementById('height').innerHTML = currentPokemon['height'];
     document.getElementById('weight').innerHTML = currentPokemon['weight'];
 
-    getBaseStats();
-    baseBar();
-    getMoves();
-
+    getBaseStats(currentPokemon);
+    baseBar(currentPokemon);
+    getMoves(currentPokemon);
 }
 
 
 /**
  * function to get the base stats
  */
-function getBaseStats() {
+function getBaseStats(currentPokemon) {
     let stats = currentPokemon['stats']
     for (let i = 0; i < stats.length; i++) {
         const element = stats[i];
@@ -59,7 +64,7 @@ function getBaseStats() {
 /**
  * function to show colored bar of base stats
  */
-function baseBar() {
+function baseBar(currentPokemon) {
     let stats = currentPokemon['stats']
     for (let i = 0; i < stats.length; i++) {
         const stat = stats[i];
@@ -78,7 +83,7 @@ function baseBar() {
 /**
  * function to get moves
  */
-function getMoves() {
+function getMoves(currentPokemon) {
     let moves = currentPokemon['moves'];
     for (let i = 0; i < moves.length; i++) {
         const move = moves[i];
@@ -87,7 +92,7 @@ function getMoves() {
         } else {
             document.getElementById('moves').innerHTML += `<div class="moves">${move['move']['name']}.</div>`;
         }
-     
+
     }
 }
 
@@ -127,15 +132,94 @@ function getbackgroundColor() {
         if (n == true) {
             document.getElementById('pokedex').style.backgroundColor = color;
         }
-        
+
         if (n == true && color == 'white') {
             document.getElementById('pokedex').style.color = 'gray';
             document.getElementById('back').style.color = 'gray';
-            
+
         }
     }
+}
+
+/**
+ * function to request Species JSON for more details
+ */
+async function requestSpeciesURL(currentPokemon) {
+    let speciesURL = currentPokemon['species']['url'];
+    console.log('URL', speciesURL);
+
+    let sResponse = await fetch(speciesURL);
+    species = await sResponse.json();
+    console.log('species Details', species);
+
+    //pokeSpecies.push(species);
+    getEggGroup();
+    getGrowthRate();
+    getHabitats();
+
+    requestEvolutionChain(currentPokemon);
+}
+
+/**
+ * function to get Egg Groups from Species JSON
+ */
+function getEggGroup() {
+    let eggGroups = species['egg_groups'];
+
+    for (let i = 0; i < eggGroups.length; i++) {
+        const group = eggGroups[i];
+        let egg = group['name'];
+        document.getElementById('eggGroups').innerHTML += `<li>
+                    ${egg} </li>
+                `;
+    }
+}
+
+/**
+ * function to get Growth Rate from Species JSON
+ */
+function getGrowthRate() {
+    let growthRate = species['growth_rate']['name'];
+    document.getElementById('growthRate').innerHTML = growthRate;
+}
+
+/**
+ * functin to get Habitats from Species JSON
+ */
+function getHabitats() {
+    let habitat = species['habitat']['name'];
+    document.getElementById('habitat').innerHTML = habitat;
+}
+
+/**
+ * function to request Evolution JSON
+ */
+async function requestEvolutionChain(currentPokemon) {
+    let evoURL = species['evolution_chain']['url'];
+    //console.log('URL', evoURL);
+
+    let eResponse = await fetch(evoURL);
+    evolution = await eResponse.json();
+    console.log('Evolution', evolution);
+
+    //evolution.push(evolution);
+    getTrigger(currentPokemon);
+}
+
+function getTrigger(currentPokemon) {
+    let trigger = evolution['chain']['evolves_to'][0]["evolution_details"][0]['trigger']['name'];
+    let level = evolution['chain']['evolves_to'][0]["evolution_details"][0]['min_level'];
+
+    document.getElementById('trigger').innerHTML = trigger + level;
+    document.getElementById('evoImg').src = currentPokemon['sprites']['other']['dream_world']['front_default'];
+
+    let species1 = evolution['chain']['evolves_to'][0]['species']['name'];
+    document.getElementById('species1').innerHTML = species1;
+
+
 
 }
+
 
 // sets arry in local storage
 function setArray(key, array) {
