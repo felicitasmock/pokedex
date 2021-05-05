@@ -213,11 +213,11 @@ async function requestEvolutionChain(currentPokemon) {
  */
 function getTrigger(currentPokemon) {
     let trigger = evolution['chain']['evolves_to'][0]["evolution_details"][0]['trigger']['name'];
-    let level = evolution['chain']['evolves_to'][0]["evolution_details"][0]['min_level'];
-
-    document.getElementById('trigger').innerHTML = trigger + level;
+    
+    document.getElementById('trigger').innerHTML = trigger;
+    
     document.getElementById('evoImg').src = currentPokemon['sprites']['other']['dream_world']['front_default'];
-
+    document.getElementById('species0').innerHTML = currentPokemon['name'];
 }
 
 /**
@@ -232,17 +232,17 @@ async function getSpeciesOneImg(currentPokemon) {
     let url = `https://pokeapi.co/api/v2/pokemon/${species1}`;
     let response = await fetch(url);
     let newPokemon = await response.json();
-    console.log('New pokemon', newPokemon);
+        console.log('New pokemon', newPokemon);
 
     //defines name in species to check wheter its the first in evolution chain or not
     let name1 = species['evolves_from_species'];
-    console.log('name 1', name1);
+        console.log('name 1', name1);
 
     //get name for second next pokemon in evolution chain
     let species2 = evolution['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'];
 
-    console.log('1. pokemon', species1);
-    console.log('2. pokemon', species2);
+        console.log('1. pokemon', species1);
+        console.log('2. pokemon', species2);
 
     checkEvolutionChain(currentPokemon, newPokemon, name1, species1, species2);
 }
@@ -257,15 +257,19 @@ async function getSpeciesOneImg(currentPokemon) {
 function checkEvolutionChain(currentPokemon, newPokemon, name1, species1, species2) {
     //current pokemon of site
     let pokemonName = currentPokemon['name'];
-    console.log('aktueller pokemon', pokemonName);
-    console.log('1. pokemon', species1.innerHTML);
-    console.log('2. pokemon', species2);
+        console.log('aktueller pokemon', pokemonName);
+        console.log('1. pokemon', species1.innerHTML);
+        console.log('2. pokemon', species2);
 
     //if the first pokemon in evolutino chain is null - show next pokemon
     if (name1 == null) {
         let speciesOneImg = newPokemon['sprites']['other']['dream_world']['front_default'];
         document.getElementById('evoImg1').src = speciesOneImg;
         document.getElementById('species1').innerHTML = species1;
+        console.log('level1', species1);
+        let level = evolution['chain']['evolves_to'][0]["evolution_details"][0]['min_level'];
+        document.getElementById('level').innerHTML = level;
+
     }
     //if the first pokemon in evolutino chain is NOT null - go to next function
     if (name1 !== null) {
@@ -273,11 +277,13 @@ function checkEvolutionChain(currentPokemon, newPokemon, name1, species1, specie
     }
 }
 
+/**
+ * function to hide evolution chain if it is the last pokemon in evolution chain
+ */
 function hideEvolutionChain(){
     document.getElementById('trigger').style.display = "none";
     document.getElementById('species1').style.display = "none";
     document.getElementById('evoImgWrapper').style.display = "none";
-
 }
 
 /**
@@ -290,17 +296,21 @@ async function getSpeciesTwoImg(species2, pokemonName) {
     if (species2 == pokemonName) {
         hideEvolutionChain();
     } else {
-        //else get name and IMG for next pokemon in evolutino chain
+        //else get name and IMG for next pokemon in evolution chain
         //get name for second next pokemon in evolution chain
         let species2 = evolution['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'];
         let url = `https://pokeapi.co/api/v2/pokemon/${species2}`;
         let response = await fetch(url);
         let nextPokemon = await response.json();
-        console.log('New pokemon', nextPokemon);
+            console.log('New pokemon', nextPokemon);
+            console.log('level2', species2);
 
         let speciesOneImg = nextPokemon['sprites']['other']['dream_world']['front_default'];
         document.getElementById('evoImg1').src = speciesOneImg;
         document.getElementById('species1').innerHTML = species2;
+
+        let level2 = evolution["chain"]['evolves_to'][0]['evolves_to'][0]['evolution_details'][0]['min_level'];
+        document.getElementById('level').innerHTML = level2;
     }
 }
 
