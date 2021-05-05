@@ -28,7 +28,6 @@ async function loadPokemon() {
 }
 
 
-
 // function to get all pokemon infos
 function renderPokemonInfo(currentPokemon) {
     document.getElementById('pokemonName').innerHTML = currentPokemon['name'];
@@ -40,7 +39,6 @@ function renderPokemonInfo(currentPokemon) {
     baseBar(currentPokemon);
     getMoves(currentPokemon);
 }
-
 
 /**
  * function to get the base stats
@@ -146,11 +144,11 @@ function getbackgroundColor() {
  */
 async function requestSpeciesURL(currentPokemon) {
     let speciesURL = currentPokemon['species']['url'];
-        //console.log('URL', speciesURL);
+    //console.log('URL', speciesURL);
 
     let sResponse = await fetch(speciesURL);
     species = await sResponse.json();
-     console.log('species Details', species);
+    console.log('species Details', species);
 
     //pokeSpecies.push(species);
     getEggGroup();
@@ -213,9 +211,9 @@ async function requestEvolutionChain(currentPokemon) {
  */
 function getTrigger(currentPokemon) {
     let trigger = evolution['chain']['evolves_to'][0]["evolution_details"][0]['trigger']['name'];
-    
+
     document.getElementById('trigger').innerHTML = trigger;
-    
+
     document.getElementById('evoImg').src = currentPokemon['sprites']['other']['dream_world']['front_default'];
     document.getElementById('species0').innerHTML = currentPokemon['name'];
 }
@@ -232,17 +230,49 @@ async function getSpeciesOneImg(currentPokemon) {
     let url = `https://pokeapi.co/api/v2/pokemon/${species1}`;
     let response = await fetch(url);
     let newPokemon = await response.json();
-        console.log('New pokemon', newPokemon);
+    console.log('New pokemon', newPokemon);
 
     //defines name in species to check wheter its the first in evolution chain or not
     let name1 = species['evolves_from_species'];
-        // console.log('name 1', name1);
-        
-    //get name for second next pokemon in evolution chain
-    let species2 = evolution['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'];
-  
+    // console.log('name 1', name1);
 
-    checkEvolutionChain(currentPokemon, newPokemon, name1, species1, species2);
+    checkEnvoles(currentPokemon, newPokemon, name1, species1);
+
+}
+
+/**
+ * function to check if the evolution chain needs to be handled different
+ * 
+ * @param {string} currentPokemon - This is the variable of the current Pokemon
+ * @param {string} newPokemon - This is the variable of the next Pokemon in evolution chain
+ * @param {*} name1 -  this ist the varibale to check if it is the first pokemon in evolution chain
+ * @param {*} species1 - This is the variable of the first pokemon in evolution chain
+ */
+function checkEnvoles(currentPokemon, newPokemon, name1, species1) {
+    let envoles = evolution['chain']['evolves_to'][0]['evolves_to']['length'];
+    console.log('envoles', envoles);
+
+    let speciesSpecial = evolution["chain"]["evolves_to"][0]['species']['name'];
+    console.log('extrawurst', speciesSpecial);
+
+    if (envoles == 0) {
+        console.log('Achtung', envoles);
+        
+        let speciesOneImgSpecial = newPokemon['sprites']['other']['dream_world']['front_default'];
+        document.getElementById('evoImg1').src = speciesOneImgSpecial;
+        document.getElementById('species1').innerHTML = speciesSpecial;
+
+        let specialLevel = evolution["chain"]["evolves_to"][0]['evolution_details'][0]["min_level"];
+        document.getElementById('level').innerHTML = specialLevel;
+    }  if (speciesSpecial == pokemonName.innerHTML && envoles == 0) {
+        hideEvolutionChain()
+
+        //zeigt Fehlermeldung z.b. bei rattata, da else trotzdem ausgeführt wird, es species2 aber nicht gibt
+    } else {
+        //get name for second next pokemon in evolution chain
+        let species2 = evolution['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'];
+        checkEvolutionChain(currentPokemon, newPokemon, name1, species1, species2);
+    }
 }
 
 /**
@@ -250,25 +280,30 @@ async function getSpeciesOneImg(currentPokemon) {
  * 
  * @param {string} currentPokemon - This is the varibale for the current Pokemon
  * @param {string} newPokemon - This is the variable for the next Pokemon in evolution chain
- * @param {string} name1 - this ist the varibale to check if it is the first pokemon in wvolution chain
+ * @param {string} name1 - this ist the varibale to check if it is the first pokemon in evolution chain
+ * @param {string} species1 -  this ist the varibale of the first pokemon in evolution chain
+ * @param {string} species2 -  this ist the varibale of the second pokemon in evolution chain
  */
 function checkEvolutionChain(currentPokemon, newPokemon, name1, species1, species2) {
     //current pokemon of site
     let pokemonName = currentPokemon['name'];
-        console.log('aktueller pokemon', pokemonName);
-        console.log('1. pokemon', species1);
-        console.log('2. pokemon', species2);
+    console.log('aktueller pokemon', pokemonName);
+    console.log('1. pokemon', species1);
+    console.log('2. pokemon', species2);
+
 
     //if the first pokemon in evolutino chain is null - show next pokemon
     if (name1 == null) {
+
         let speciesOneImg = newPokemon['sprites']['other']['dream_world']['front_default'];
         document.getElementById('evoImg1').src = speciesOneImg;
         document.getElementById('species1').innerHTML = species1;
 
         let level = evolution['chain']['evolves_to'][0]["evolution_details"][0]['min_level'];
         document.getElementById('level').innerHTML = level;
-
     }
+
+
     //if the first pokemon in evolutino chain is NOT null - go to next function
     if (name1 !== null) {
         getSpeciesTwoImg(species2, pokemonName);
@@ -278,7 +313,7 @@ function checkEvolutionChain(currentPokemon, newPokemon, name1, species1, specie
 /**
  * function to hide evolution chain if it is the last pokemon in evolution chain
  */
-function hideEvolutionChain(){
+function hideEvolutionChain() {
     document.getElementById('trigger').style.display = "none";
     document.getElementById('species1').style.display = "none";
     document.getElementById('evoImgWrapper').style.display = "none";
@@ -300,8 +335,8 @@ async function getSpeciesTwoImg(species2, pokemonName) {
         let url = `https://pokeapi.co/api/v2/pokemon/${species2}`;
         let response = await fetch(url);
         let nextPokemon = await response.json();
-            console.log('New pokemon', nextPokemon);
-            console.log('level2', species2);
+        console.log('New pokemon', nextPokemon);
+        console.log('level2', species2);
 
         let speciesOneImg = nextPokemon['sprites']['other']['dream_world']['front_default'];
         document.getElementById('evoImg1').src = speciesOneImg;
