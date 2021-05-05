@@ -146,11 +146,11 @@ function getbackgroundColor() {
  */
 async function requestSpeciesURL(currentPokemon) {
     let speciesURL = currentPokemon['species']['url'];
-    console.log('URL', speciesURL);
+        //console.log('URL', speciesURL);
 
     let sResponse = await fetch(speciesURL);
     species = await sResponse.json();
-    console.log('species Details', species);
+     console.log('species Details', species);
 
     //pokeSpecies.push(species);
     getEggGroup();
@@ -184,7 +184,7 @@ function getGrowthRate() {
 }
 
 /**
- * functin to get Habitats from Species JSON
+ * function to get Habitats from Species JSON
  */
 function getHabitats() {
     let habitat = species['habitat']['name'];
@@ -236,13 +236,11 @@ async function getSpeciesOneImg(currentPokemon) {
 
     //defines name in species to check wheter its the first in evolution chain or not
     let name1 = species['evolves_from_species'];
-        console.log('name 1', name1);
-
+        // console.log('name 1', name1);
+        
     //get name for second next pokemon in evolution chain
     let species2 = evolution['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'];
-
-        console.log('1. pokemon', species1);
-        console.log('2. pokemon', species2);
+  
 
     checkEvolutionChain(currentPokemon, newPokemon, name1, species1, species2);
 }
@@ -258,7 +256,7 @@ function checkEvolutionChain(currentPokemon, newPokemon, name1, species1, specie
     //current pokemon of site
     let pokemonName = currentPokemon['name'];
         console.log('aktueller pokemon', pokemonName);
-        console.log('1. pokemon', species1.innerHTML);
+        console.log('1. pokemon', species1);
         console.log('2. pokemon', species2);
 
     //if the first pokemon in evolutino chain is null - show next pokemon
@@ -266,7 +264,7 @@ function checkEvolutionChain(currentPokemon, newPokemon, name1, species1, specie
         let speciesOneImg = newPokemon['sprites']['other']['dream_world']['front_default'];
         document.getElementById('evoImg1').src = speciesOneImg;
         document.getElementById('species1').innerHTML = species1;
-        console.log('level1', species1);
+
         let level = evolution['chain']['evolves_to'][0]["evolution_details"][0]['min_level'];
         document.getElementById('level').innerHTML = level;
 
