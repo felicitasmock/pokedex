@@ -222,18 +222,86 @@ function getTrigger(currentPokemon) {
 
 /**
  * function to get the next pokemon in evolution chain with name and img
+ * 
+ * @param {string} currentPokemon -  This is the varibale for the current Pokemon
  */
-async function getSpeciesOneImg(){
+async function getSpeciesOneImg(currentPokemon) {
+    //get name for next pokemon in evolution chain
     let species1 = evolution['chain']['evolves_to'][0]['species']['name'];
-    document.getElementById('species1').innerHTML = species1;
 
     let url = `https://pokeapi.co/api/v2/pokemon/${species1}`;
     let response = await fetch(url);
     let newPokemon = await response.json();
-    console.log('new pokemon', newPokemon);
+    console.log('New pokemon', newPokemon);
 
-    let speciesOneImg = newPokemon['sprites']['other']['dream_world']['front_default'];
-    document.getElementById('evoImg1').src = speciesOneImg;
+    //defines name in species to check wheter its the first in evolution chain or not
+    let name1 = species['evolves_from_species'];
+    console.log('name 1', name1);
+
+    //get name for second next pokemon in evolution chain
+    let species2 = evolution['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'];
+
+    console.log('1. pokemon', species1);
+    console.log('2. pokemon', species2);
+
+    checkEvolutionChain(currentPokemon, newPokemon, name1, species1, species2);
+}
+
+/**
+ * function to check the evulition chain of the pokemon
+ * 
+ * @param {string} currentPokemon - This is the varibale for the current Pokemon
+ * @param {string} newPokemon - This is the variable for the next Pokemon in evolution chain
+ * @param {string} name1 - this ist the varibale to check if it is the first pokemon in wvolution chain
+ */
+function checkEvolutionChain(currentPokemon, newPokemon, name1, species1, species2) {
+    //current pokemon of site
+    let pokemonName = currentPokemon['name'];
+    console.log('aktueller pokemon', pokemonName);
+    console.log('1. pokemon', species1.innerHTML);
+    console.log('2. pokemon', species2);
+
+    //if the first pokemon in evolutino chain is null - show next pokemon
+    if (name1 == null) {
+        let speciesOneImg = newPokemon['sprites']['other']['dream_world']['front_default'];
+        document.getElementById('evoImg1').src = speciesOneImg;
+        document.getElementById('species1').innerHTML = species1;
+    }
+    //if the first pokemon in evolutino chain is NOT null - go to next function
+    if (name1 !== null) {
+        getSpeciesTwoImg(species2, pokemonName);
+    }
+}
+
+function hideEvolutionChain(){
+    document.getElementById('trigger').style.display = "none";
+    document.getElementById('species1').style.display = "none";
+    document.getElementById('evoImgWrapper').style.display = "none";
+
+}
+
+/**
+ * 
+ * @param {string} species2 - This ist he varibale for the second pokemon
+ * @param {string} pokemonName - This is the variable for the current Pokemon on site
+ */
+async function getSpeciesTwoImg(species2, pokemonName) {
+    //if the second pokemon in evolution chain has same name as the current pokemon on site
+    if (species2 == pokemonName) {
+        hideEvolutionChain();
+    } else {
+        //else get name and IMG for next pokemon in evolutino chain
+        //get name for second next pokemon in evolution chain
+        let species2 = evolution['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'];
+        let url = `https://pokeapi.co/api/v2/pokemon/${species2}`;
+        let response = await fetch(url);
+        let nextPokemon = await response.json();
+        console.log('New pokemon', nextPokemon);
+
+        let speciesOneImg = nextPokemon['sprites']['other']['dream_world']['front_default'];
+        document.getElementById('evoImg1').src = speciesOneImg;
+        document.getElementById('species1').innerHTML = species2;
+    }
 }
 
 // sets array in local storage
