@@ -103,7 +103,6 @@ body {
     padding-bottom: 20px;
 }
 
-
 .info {
     padding: 10px;
 }
@@ -195,4 +194,48 @@ body {
     justify-content: space-evenly;
     /* align-items: center; */
     width: 100%;
+}
+
+@media(max-width: 1022px) {
+    .poke-img {
+        width: 200px;
+        height: 200px;
+    }
+    .base-line {
+        position: absolute;
+        margin-left: 0px;
+        margin-top: 48px;
+    }
+    tr {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
+    .base-stats {
+        width: 100%;
+    }
+    .evo-wrapper {
+        flex-direction: column;
+    }
+    #evoImgWrapper {
+        flex-direction: column;
+    }
+    .species-wrapper {
+        align-items: center;
+        padding-top: 10px;
+    }
+    .trigger-wrapper {
+        padding-top: 10px
+    }
+    #pokemonName{
+        padding-top: 20px;
+    }
+    .inner-container{
+        width: unset;
+        padding-left: 20px;
+    }
+    .evolution-img{
+        width: 100%;
+    }
 }
